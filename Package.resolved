@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "itunessearchapi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Finnvoor/iTunesSearchAPI.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "d1acba998bd753a50795bfdcd91f89b887d9f853"
+      }
+    }
+  ],
+  "version" : 2
+}
