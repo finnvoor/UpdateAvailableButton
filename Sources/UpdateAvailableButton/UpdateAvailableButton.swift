@@ -7,12 +7,12 @@ public struct UpdateAvailableButton: View {
     // MARK: Lifecycle
 
     public init(
-        appID: Int,
+        bundleID: String = Bundle.main.bundleIdentifier ?? "",
         localVersion: String? = Bundle.main.object(
             forInfoDictionaryKey: "CFBundleShortVersionString"
         ) as? String
     ) {
-        self.appID = appID
+        self.bundleID = bundleID
         self.localVersion = localVersion
     }
 
@@ -20,7 +20,7 @@ public struct UpdateAvailableButton: View {
 
     public var body: some View {
         ZStack {
-            if updateAvailable {
+            if updateAvailable, let appID {
                 Link(destination: URL(string: "https://apps.apple.com/app/id\(appID)")!) {
                     Label("Update Available", systemImage: "sparkles")
                         .font(.caption2)
@@ -35,18 +35,19 @@ public struct UpdateAvailableButton: View {
 
     // MARK: Private
 
-    private let appID: Int
+    private let bundleID: String
     private let localVersion: String?
 
+    @State private var appID: Int?
     @State private var updateAvailable = false
 
     private func checkForUpdates() async {
         guard let localVersion,
               let result = try? await iTunesSearchAPI.lookup(
-                  iTunesID: appID
+                  bundleIdentifier: bundleID
               ).results.first,
               let remoteVersion = result.version else { return }
-
+        appID = result.trackId
         var localVersionComponents = localVersion.components(separatedBy: ".")
         var remoteVersionComponents = remoteVersion.components(separatedBy: ".")
         let zeroDiff = localVersionComponents.count - remoteVersionComponents.count
@@ -71,5 +72,5 @@ public struct UpdateAvailableButton: View {
 }
 
 #Preview {
-    UpdateAvailableButton(appID: 1673518618, localVersion: "1.0.0")
+    UpdateAvailableButton(bundleID: "com.finnvoorhees.HextEdit", localVersion: "1.0.0")
 }
