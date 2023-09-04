@@ -10,6 +10,6 @@ Section {
 } header: {
     Text("About")
 } footer: {
-    UpdateAvailableButton(appID: 1673518618)
+    UpdateAvailableButton()
 }
 ```
